@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div class="temp">
+    <div class="city-name"></div>
+    <div class="temp-city"></div>
+    <div class="city-clouds"></div>
+    <div class='item'></div>
+</div>
+<script>
+    fetch(`http://api.openweathermap.org/data/2.5/weather?q=Osh&appid=0c427c2e14007930b75c8356085add64`)
+        .then(res => res.json()
+        )
+        .then(data => {
+            console.log(data)
+            document.getElementsByClassName('city-name')[0].innerHTML = data.name
+            document.getElementsByClassName('temp-city')[0].innerHTML = Math.round(data.main.temp - 274) + '&deg'
+            document.getElementsByClassName('city-clouds')[0].innerHTML = data.weather[0].description
+            document.getElementsByClassName('item')[0].innerHTML = `<img src="http://openweathermap.org/img/w/${data.weather[0].icon}.png">`
+        })
+</script>
+</body>
+</html>
