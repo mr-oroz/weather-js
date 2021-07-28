@@ -5,26 +5,111 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url("https://storge.pic2.me/cm/3200x1800/533/53d4fc4e44238.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .card {
+            background-color: rgba(0, 0, 0, .3);
+            padding: 2em;
+            margin: 1em;
+            border-radius: 8px;
+            max-width: 420px;
+            width: 100%;
+            color: #fff;
+        }
+
+        .search {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        input {
+            border-radius: 20px;
+            outline: none;
+        }
+
+        input, button {
+            padding: 8px;
+            border: none;
+        }
+        .weather-cloud {
+            display: flex;
+            align-items: center;
+            justify-content: start;
+        }
+        button {
+            background-color: rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            color: white;
+            margin: 0 8px;
+        }
+        .description {
+            text-transform: capitalize;
+        }
+    </style>
+    <title>Weather JS</title>
 </head>
 <body>
-<div class="temp">
-    <div class="city-name"></div>
-    <div class="temp-city"></div>
-    <div class="city-clouds"></div>
-    <div class='item'></div>
+<div class="card">
+    <div class="search">
+        <input class="search-bar" placeholder="Найти..." type="text">
+        <button>Найти</i></button>
+    </div>
+    <div class="weather">
+        <h2 class="city">OSH</h2>
+        <div class="temp"></div>
+        <div class="weather-cloud">
+            <img src="" alt="" class="icon">
+            <div class="description">CLOUD</div>
+        </div>
+        <div class="humidity">60&deg</div>
+        <div class="wind">Wind speed 6.5km/s</div>
+    </div>
 </div>
 <script>
-    fetch(`http://api.openweathermap.org/data/2.5/weather?q=Osh&appid=0c427c2e14007930b75c8356085add64`)
-        .then(res => res.json()
-        )
-        .then(data => {
-            console.log(data)
-            document.getElementsByClassName('city-name')[0].innerHTML = data.name
-            document.getElementsByClassName('temp-city')[0].innerHTML = Math.round(data.main.temp - 274) + '&deg'
-            document.getElementsByClassName('city-clouds')[0].innerHTML = data.weather[0].description
-            document.getElementsByClassName('item')[0].innerHTML = `<img src="http://openweathermap.org/img/w/${data.weather[0].icon}.png">`
+    const weather = {
+        apiKey: '4a54e3ace384a71acf667897cc5e3095',
+    }
+    const SendRequest = (city) => {
+        return fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${weather.apiKey}`)
+            .then(res => res.json())
+            .then(data => DisplayWeather(data))
+        .catch(err => {
+            document.querySelector('.city').innerText = 'Такого городо нет';
         })
+    }
+    const DisplayWeather = (data) => {
+        const {name} = data;
+        const {icon, description} = data.weather[0];
+        const {temp, humidity} = data.main;
+        const {speed} = data.wind;
+        console.log(name, icon, temp, speed)
+        document.querySelector('.city').innerText = `Погода в ${name}`
+        document.querySelector('.icon').src = `https://openweathermap.org/img/wn/${icon}.png`;
+        document.querySelector(".description").innerText = description;
+        document.querySelector(".temp").innerHTML = `${Math.round(temp-273)}&deg`;
+        document.querySelector(".humidity").innerText =`Влажность: ${humidity}%`;
+        document.querySelector(".wind").innerText =`Скорость ветра: ${speed} км/ч`;
+    }
+    document.querySelector('.search button').addEventListener('click',() => {
+        search();
+        document.querySelector('.search-bar').value.innerText = ''
+    })
+    const search = () => {
+        SendRequest(document.querySelector('.search-bar').value)
+    }
+    SendRequest('Osh')
 </script>
+
 </body>
 </html>

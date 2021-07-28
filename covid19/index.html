@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        body {
+            background: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .box {
+            display: flex;
+            flex-direction: column;
+            border: 2px solid crimson;
+            width: 300px;
+            padding: 15px;
+            margin: 20px;
+        }
+
+        span {
+            font-size: 18px;
+        }
+
+        span, h1 {
+            color: white;
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+<div class="box">
+    <h1>Глобальный</h1>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+<div>
+    <button onclick="RefreshData()">обновить</button>
+</div>
+<div class="kyrgyz">
+    <div class="Confirmed"></div>
+    <div class="Deaths"></div>
+    <div class="TotalConfirmed"></div>
+    <div class="TotalDeaths"></div>
+    <div class="TotalRecovered"></div>
+    <div class="Date"></div>
+</div>
+<script>
+    const span = document.getElementsByTagName('span')
+    const dataReguest = 'https://api.covid19api.com/summary';
+    const Countres = 'https://api.covid19api.com/dayone/country/kyrgyzstan/status/confirmed'
+    const sendReguest = (url) => {
+        return fetch(url)
+            .then(res => res.json())
+    }
+    sendReguest(dataReguest)
+        .then(data => {
+            // console.log(data)
+                span[0].innerText = `Новый Подтверждено: ${data.Global.NewConfirmed}`
+                span[1].innerText = `Новые смерти: ${data.Global.NewDeaths}`
+                span[2].innerText = `Итого Подтверждено: ${data.Global.TotalConfirmed}`
+                span[3].innerText = `Всего смертей: ${data.Global.TotalDeaths}`
+                span[4].innerText = `Всего восстановлено: ${data.Global.TotalRecovered}`
+                span[5].innerText = `Дата: ${data.Global.Date}`
+        })
+
+    const RefreshData = () => {
+        clearData()
+        sendReguest()
+    }
+    const clearData =() => {
+        document.getElementsByClassName('box')[0].empty()
+    }
+
+</script>
+</body>
+</html>
