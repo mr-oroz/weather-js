@@ -67,13 +67,15 @@
     </div>
     <div class="weather">
         <h2 class="city">OSH</h2>
-        <div class="temp"></div>
-        <div class="weather-cloud">
-            <img src="" alt="" class="icon">
-            <div class="description">CLOUD</div>
+        <div class="weather-inner">
+            <div class="temp"></div>
+            <div class="weather-cloud">
+                <img src="" alt="" class="icon">
+                <div class="description">CLOUD</div>
+            </div>
+            <div class="humidity">60&deg</div>
+            <div class="wind">Wind speed 6.5km/s</div>
         </div>
-        <div class="humidity">60&deg</div>
-        <div class="wind">Wind speed 6.5km/s</div>
     </div>
 </div>
 <script>
@@ -86,6 +88,7 @@
             .then(data => DisplayWeather(data))
         .catch(err => {
             document.querySelector('.city').innerText = 'Такого городо нет';
+            document.querySelector('.weather-inner').style.display = 'none'
         })
     }
     const DisplayWeather = (data) => {
@@ -94,6 +97,7 @@
         const {temp, humidity} = data.main;
         const {speed} = data.wind;
         console.log(name, icon, temp, speed)
+        document.querySelector('.weather-inner').style.display = 'block'
         document.querySelector('.city').innerText = `Погода в ${name}`
         document.querySelector('.icon').src = `https://openweathermap.org/img/wn/${icon}.png`;
         document.querySelector(".description").innerText = description;
